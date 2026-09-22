@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <title>ARISTO Attendance</title>
 
@@ -29,8 +28,7 @@
 
     .logo {
       text-align: center;
-      margin-top: 25px;
-      margin-bottom: 25px;
+      margin: 25px 0;
     }
 
     .logo h1 {
@@ -46,10 +44,10 @@
     }
 
     .card {
-      background: white;
+      background: #fff;
       border-radius: 18px;
       padding: 24px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
     }
 
     label {
@@ -84,21 +82,24 @@
       margin-top: 8px;
     }
 
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
     .login-btn {
       background: #111;
       color: white;
-    }
-
-    .login-btn:disabled,
-    .action-btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
     }
 
     .logout-btn {
       background: #e9ecef;
       color: #222;
       margin-top: 15px;
+    }
+
+    .dashboard {
+      display: none;
     }
 
     .employee-name {
@@ -134,29 +135,28 @@
       font-weight: bold;
     }
 
+    .action-btn {
+      color: white;
+    }
+
     .login-action {
       background: #16803c;
-      color: white;
     }
 
     .logout-action {
       background: #c62828;
-      color: white;
     }
 
     .done-action {
       background: #777;
-      color: white;
     }
 
-    .info {
-      margin-top: 18px;
-      padding: 14px;
-      background: #f7f7f7;
-      border-radius: 10px;
+    .location-status {
+      text-align: center;
       font-size: 13px;
-      line-height: 1.5;
-      color: #555;
+      color: #777;
+      margin-top: 10px;
+      min-height: 18px;
     }
 
     .message {
@@ -166,6 +166,7 @@
       text-align: center;
       display: none;
       font-size: 14px;
+      line-height: 1.4;
     }
 
     .message.success {
@@ -186,14 +187,6 @@
       color: #795548;
     }
 
-    .dashboard {
-      display: none;
-    }
-
-    .login-screen {
-      display: block;
-    }
-
     .session-box {
       margin-top: 15px;
     }
@@ -201,13 +194,10 @@
     .session {
       display: flex;
       justify-content: space-between;
+      gap: 10px;
       padding: 12px 0;
       border-bottom: 1px solid #eee;
       font-size: 14px;
-    }
-
-    .session:last-child {
-      border-bottom: none;
     }
 
     .session span:first-child {
@@ -233,7 +223,24 @@
       font-size: 24px;
     }
 
-    /* Camera */
+    .info {
+      margin-top: 18px;
+      padding: 14px;
+      background: #f7f7f7;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .small-note {
+      text-align: center;
+      color: #888;
+      font-size: 12px;
+      margin-top: 18px;
+    }
+
+    /* CAMERA */
 
     .camera-modal {
       display: none;
@@ -272,7 +279,6 @@
       background: white;
       color: #111;
       border-radius: 50px;
-      height: 55px;
       margin: 0;
     }
 
@@ -281,24 +287,6 @@
       color: white;
       margin-top: 10px;
     }
-
-    .location-status {
-      text-align: center;
-      font-size: 13px;
-      color: #777;
-      margin-top: 10px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .small-note {
-      text-align: center;
-      color: #888;
-      font-size: 12px;
-      margin-top: 18px;
-    }
   </style>
 </head>
 
@@ -306,8 +294,9 @@
 
 <div class="container">
 
-  <!-- LOGIN SCREEN -->
-  <div id="loginScreen" class="login-screen">
+  <!-- ================= LOGIN ================= -->
+
+  <div id="loginScreen">
 
     <div class="logo">
       <h1>ARISTO</h1>
@@ -317,24 +306,30 @@
     <div class="card">
 
       <label for="employeeId">Employee ID</label>
+
       <input
-        type="text"
         id="employeeId"
+        type="text"
         placeholder="Enter Employee ID"
         autocomplete="username"
         autocapitalize="characters"
       >
 
       <label for="pin">PIN</label>
+
       <input
-        type="password"
         id="pin"
+        type="password"
         placeholder="Enter PIN"
         inputmode="numeric"
         autocomplete="current-password"
       >
 
-      <button id="loginButton" class="login-btn" onclick="login()">
+      <button
+        id="loginButton"
+        class="login-btn"
+        onclick="login()"
+      >
         LOGIN
       </button>
 
@@ -343,13 +338,14 @@
     </div>
 
     <div class="small-note">
-      Camera and location permission are required for attendance.
+      Camera and location permission are required only when recording attendance.
     </div>
 
   </div>
 
 
-  <!-- DASHBOARD -->
+  <!-- ================= DASHBOARD ================= -->
+
   <div id="dashboard" class="dashboard">
 
     <div class="logo">
@@ -367,6 +363,7 @@
         --
       </div>
 
+
       <div class="status-box">
 
         <div class="status-title">
@@ -379,16 +376,20 @@
 
       </div>
 
+
       <button
         id="actionButton"
         class="action-btn"
-        onclick="startAttendance()">
+        onclick="startAttendance()"
+      >
         --
       </button>
 
+
       <div id="locationStatus" class="location-status">
-        Location will be captured automatically.
+        Location will be captured when attendance is recorded.
       </div>
+
 
       <div id="actionMessage" class="message"></div>
 
@@ -414,14 +415,23 @@
 
 
       <div class="info">
-        <strong>Attendance process</strong><br><br>
-        1. Login → Photo + GPS<br>
-        2. Logout → Photo + GPS<br>
-        3. Optional second Login / Logout<br>
+        <strong>Attendance process</strong>
+        <br><br>
+
+        1. Login → Photo + GPS
+        <br>
+        2. Logout → Photo + GPS
+        <br>
+        3. Optional second Login / Logout
+        <br>
         4. Maximum 2 sessions per day
       </div>
 
-      <button class="logout-btn" onclick="logoutUser()">
+
+      <button
+        class="logout-btn"
+        onclick="logoutUser()"
+      >
         EXIT
       </button>
 
@@ -432,28 +442,36 @@
 </div>
 
 
-<!-- CAMERA MODAL -->
+<!-- ================= CAMERA ================= -->
 
 <div id="cameraModal" class="camera-modal">
 
   <div class="camera-header">
-    Take Attendance Photo
+    <span id="cameraTitle">
+      Take Attendance Photo
+    </span>
   </div>
 
-  <video id="cameraVideo" autoplay playsinline></video>
+  <video
+    id="cameraVideo"
+    autoplay
+    playsinline
+  ></video>
 
   <div class="camera-controls">
 
     <button
       id="captureButton"
       class="capture-btn"
-      onclick="capturePhoto()">
+      onclick="capturePhoto()"
+    >
       📷 CAPTURE PHOTO
     </button>
 
     <button
       class="cancel-camera"
-      onclick="closeCamera()">
+      onclick="closeCamera()"
+    >
       CANCEL
     </button>
 
@@ -463,106 +481,1595 @@
 
 
 <script>
-  // Simple functional stub to ensure the code tags close properly
-  let currentStream = null;
 
-  function login() {
-    const empId = document.getElementById('employeeId').value;
-    const pin = document.getElementById('pin').value;
-    const msg = document.getElementById('loginMessage');
-    
-    if(!empId || !pin) {
-      msg.className = "message error";
-      msg.innerText = "Please enter both Employee ID and PIN";
+  // ==========================================================
+  // CLOUDFLARE WORKER
+  // ==========================================================
+
+  const API_BASE =
+    "https://aristo-attendance-api.darshan-kh-clk.workers.dev";
+
+
+  // ==========================================================
+  // VARIABLES
+  // ==========================================================
+
+  let currentEmployee = null;
+
+  let currentAction = null;
+
+  let cameraStream = null;
+
+
+  // ==========================================================
+  // LOGIN
+  // ==========================================================
+
+  async function login() {
+
+    const employeeId =
+      document
+        .getElementById("employeeId")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const pin =
+      document
+        .getElementById("pin")
+        .value
+        .trim();
+
+    const button =
+      document.getElementById("loginButton");
+
+
+    if (!employeeId || !pin) {
+
+      showMessage(
+        "loginMessage",
+        "Please enter Employee ID and PIN.",
+        "error"
+      );
+
       return;
     }
-    
-    msg.className = "message success";
-    msg.innerText = "Logged in successfully!";
-    
-    setTimeout(() => {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      document.getElementById('employeeName').innerText = empId.toUpperCase();
-      document.getElementById('employeeDetails').innerText = "ID: " + empId;
-      updateStatus("LOGIN 1");
-    }, 1000);
-  }
 
-  function updateStatus(action) {
-    const nextAction = document.getElementById('nextAction');
-    const actionBtn = document.getElementById('actionButton');
-    
-    nextAction.innerText = action;
-    actionBtn.innerText = action;
-    
-    if (action.includes("LOGIN")) {
-      nextAction.className = "next-action login-action";
-      actionBtn.className = "action-btn login-action";
-    } else {
-      nextAction.className = "next-action logout-action";
-      actionBtn.className = "action-btn logout-action";
+
+    button.disabled = true;
+
+    button.textContent = "CHECKING...";
+
+
+    showMessage(
+      "loginMessage",
+      "Checking Employee ID and PIN...",
+      "loading"
+    );
+
+
+    try {
+
+      const response =
+        await fetch(
+          API_BASE + "/api/login",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              employeeId: employeeId,
+              pin: pin
+            })
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok || !data.ok) {
+
+        throw new Error(
+          data.error ||
+          data.message ||
+          "Invalid Employee ID or PIN."
+        );
+      }
+
+
+      /*
+       * IMPORTANT:
+       * Credentials are saved ONLY after
+       * Cloudflare confirms the employee.
+       */
+
+      currentEmployee = {
+
+        employeeId: employeeId,
+
+        pin: pin,
+
+        name:
+          data.employee?.name ||
+          data.name ||
+          employeeId,
+
+        department:
+          data.employee?.department ||
+          data.department ||
+          ""
+
+      };
+
+
+      sessionStorage.setItem(
+        "aristoEmployee",
+        JSON.stringify(currentEmployee)
+      );
+
+
+      displayDashboard(data);
+
+
+    } catch (error) {
+
+      console.error(
+        "LOGIN ERROR:",
+        error
+      );
+
+
+      showMessage(
+        "loginMessage",
+        error.message ||
+        "Unable to connect to attendance system.",
+        "error"
+      );
+
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent = "LOGIN";
+
     }
+
   }
 
-  function startAttendance() {
-    const modal = document.getElementById('cameraModal');
-    modal.classList.add('active');
-    
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-      .then(stream => {
-        currentStream = stream;
-        document.getElementById('cameraVideo').srcObject = stream;
-      })
-      .catch(err => {
-        alert("Camera permission denied or unavailable.");
-        closeCamera();
+
+  // ==========================================================
+  // RESTORE SESSION AFTER REFRESH
+  // ==========================================================
+
+  async function restoreSession() {
+
+    const saved =
+      sessionStorage.getItem(
+        "aristoEmployee"
+      );
+
+
+    if (!saved) {
+      return;
+    }
+
+
+    try {
+
+      currentEmployee =
+        JSON.parse(saved);
+
+
+      if (
+        !currentEmployee.employeeId ||
+        !currentEmployee.pin
+      ) {
+
+        throw new Error(
+          "Invalid saved session."
+        );
+
+      }
+
+
+      await loadStatus();
+
+
+    } catch (error) {
+
+      console.warn(
+        "Session restore failed:",
+        error
+      );
+
+
+      clearSession();
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // GET TODAY'S STATUS
+  // ==========================================================
+
+  async function loadStatus() {
+
+    if (!currentEmployee) {
+      return;
+    }
+
+
+    try {
+
+      const response =
+        await fetch(
+          API_BASE +
+          "/api/status?employeeId=" +
+          encodeURIComponent(
+            currentEmployee.employeeId
+          ) +
+          "&pin=" +
+          encodeURIComponent(
+            currentEmployee.pin
+          )
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok || !data.ok) {
+
+        throw new Error(
+          data.error ||
+          data.message ||
+          "Unable to load attendance status."
+        );
+      }
+
+
+      displayDashboard(data);
+
+
+    } catch (error) {
+
+      console.error(
+        "STATUS ERROR:",
+        error
+      );
+
+
+      clearSession();
+
+      showLoginScreen();
+
+
+      showMessage(
+        "loginMessage",
+        error.message ||
+        "Please login again.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // DISPLAY DASHBOARD
+  // ==========================================================
+
+  function displayDashboard(data) {
+
+    document.getElementById(
+      "loginScreen"
+    ).style.display = "none";
+
+
+    document.getElementById(
+      "dashboard"
+    ).style.display = "block";
+
+
+    const employee =
+      data.employee || {};
+
+
+    const attendance =
+      data.attendance || {};
+
+
+    if (employee.name) {
+
+      currentEmployee.name =
+        employee.name;
+
+    }
+
+
+    if (employee.department) {
+
+      currentEmployee.department =
+        employee.department;
+
+    }
+
+
+    document.getElementById(
+      "employeeName"
+    ).textContent =
+      currentEmployee.name ||
+      currentEmployee.employeeId;
+
+
+    document.getElementById(
+      "employeeDetails"
+    ).textContent =
+      "ID: " +
+      currentEmployee.employeeId +
+      (
+        currentEmployee.department
+          ? " • " +
+            currentEmployee.department
+          : ""
+      );
+
+
+    /*
+     * IMPORTANT:
+     * Keep the exact action returned by
+     * the Worker.
+     *
+     * LOGIN 1
+     * LOGOUT 1
+     * LOGIN 2
+     * LOGOUT 2
+     * DONE
+     */
+
+    currentAction =
+      String(
+        data.nextAction ||
+        data.action ||
+        determineNextAction(
+          attendance
+        ) ||
+        "LOGIN 1"
+      ).toUpperCase();
+
+
+    updateActionButton(
+      currentAction
+    );
+
+
+    displayAttendance(
+      attendance
+    );
+
+
+    document.getElementById(
+      "locationStatus"
+    ).textContent =
+      "Location will be captured when attendance is recorded.";
+
+
+    clearMessage(
+      "actionMessage"
+    );
+
+
+    sessionStorage.setItem(
+      "aristoEmployee",
+      JSON.stringify(
+        currentEmployee
+      )
+    );
+
+  }
+
+
+  // ==========================================================
+  // LOCAL ACTION DETECTION
+  // ==========================================================
+
+  function determineNextAction(
+    attendance
+  ) {
+
+    if (
+      !attendance ||
+      Object.keys(attendance).length === 0
+    ) {
+
+      return "LOGIN 1";
+
+    }
+
+
+    const login1 =
+      getField(
+        attendance,
+        [
+          "login1",
+          "Login 1"
+        ]
+      );
+
+
+    const logout1 =
+      getField(
+        attendance,
+        [
+          "logout1",
+          "Logout 1"
+        ]
+      );
+
+
+    const login2 =
+      getField(
+        attendance,
+        [
+          "login2",
+          "Login 2"
+        ]
+      );
+
+
+    const logout2 =
+      getField(
+        attendance,
+        [
+          "logout2",
+          "Logout 2"
+        ]
+      );
+
+
+    if (!login1) {
+      return "LOGIN 1";
+    }
+
+
+    if (!logout1) {
+      return "LOGOUT 1";
+    }
+
+
+    if (!login2) {
+      return "LOGIN 2";
+    }
+
+
+    if (!logout2) {
+      return "LOGOUT 2";
+    }
+
+
+    return "DONE";
+
+  }
+
+
+  // ==========================================================
+  // ACTION BUTTON
+  // ==========================================================
+
+  function updateActionButton(
+    action
+  ) {
+
+    const nextAction =
+      document.getElementById(
+        "nextAction"
+      );
+
+
+    const button =
+      document.getElementById(
+        "actionButton"
+      );
+
+
+    button.disabled = false;
+
+    button.className =
+      "action-btn";
+
+
+    if (
+      action === "LOGIN 1" ||
+      action === "LOGIN 2"
+    ) {
+
+      nextAction.textContent =
+        action;
+
+
+      button.textContent =
+        "📸 " + action;
+
+
+      button.classList.add(
+        "login-action"
+      );
+
+
+      return;
+
+    }
+
+
+    if (
+      action === "LOGOUT 1" ||
+      action === "LOGOUT 2"
+    ) {
+
+      nextAction.textContent =
+        action;
+
+
+      button.textContent =
+        "📸 " + action;
+
+
+      button.classList.add(
+        "logout-action"
+      );
+
+
+      return;
+
+    }
+
+
+    nextAction.textContent =
+      "DONE";
+
+
+    button.textContent =
+      "TODAY COMPLETED";
+
+
+    button.classList.add(
+      "done-action"
+    );
+
+
+    button.disabled = true;
+
+  }
+
+
+  // ==========================================================
+  // START ATTENDANCE
+  // ==========================================================
+
+  async function startAttendance() {
+
+    if (!currentEmployee) {
+
+      showActionMessage(
+        "Please login first.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      currentAction !== "LOGIN 1" &&
+      currentAction !== "LOGOUT 1" &&
+      currentAction !== "LOGIN 2" &&
+      currentAction !== "LOGOUT 2"
+    ) {
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "cameraTitle"
+    ).textContent =
+      "Take " +
+      currentAction +
+      " Photo";
+
+
+    showActionMessage(
+      "Opening camera...",
+      "loading"
+    );
+
+
+    try {
+
+      await openCamera();
+
+
+    } catch (error) {
+
+      console.error(
+        "CAMERA ERROR:",
+        error
+      );
+
+
+      showActionMessage(
+        error.message ||
+        "Unable to access camera.",
+        "error"
+      );
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // OPEN CAMERA
+  // ==========================================================
+
+  async function openCamera() {
+
+    if (
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ) {
+
+      throw new Error(
+        "Camera is not supported by this browser."
+      );
+
+    }
+
+
+    cameraStream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video: {
+
+          facingMode: {
+            ideal: "user"
+          },
+
+          width: {
+            ideal: 1280
+          },
+
+          height: {
+            ideal: 1280
+          }
+
+        },
+
+        audio: false
+
       });
+
+
+    const video =
+      document.getElementById(
+        "cameraVideo"
+      );
+
+
+    video.srcObject =
+      cameraStream;
+
+
+    document.getElementById(
+      "cameraModal"
+    ).classList.add(
+      "active"
+    );
+
+
+    await video.play();
+
   }
 
-  function capturePhoto() {
-    const msg = document.getElementById('actionMessage');
-    msg.className = "message success";
-    msg.innerText = "Attendance recorded successfully with your location!";
-    
-    const currentAction = document.getElementById('nextAction').innerText;
-    if(currentAction === "LOGIN 1") {
-      document.getElementById('session1').innerText = "In: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      updateStatus("LOGOUT 1");
-    } else if(currentAction === "LOGOUT 1") {
-      document.getElementById('session1').innerText += " | Out: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      updateStatus("LOGIN 2");
-    } else if(currentAction === "LOGIN 2") {
-      document.getElementById('session2').innerText = "In: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      updateStatus("LOGOUT 2");
-    } else {
-      document.getElementById('session2').innerText += " | Out: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      document.getElementById('nextAction').innerText = "DONE";
-      document.getElementById('nextAction').className = "next-action done-action";
-      document.getElementById('actionButton').disabled = true;
+
+  // ==========================================================
+  // CAPTURE PHOTO
+  // ==========================================================
+
+  async function capturePhoto() {
+
+    if (!cameraStream) {
+
+      showActionMessage(
+        "Camera is not active. Please try again.",
+        "error"
+      );
+
+      return;
+
     }
-    
-    closeCamera();
+
+
+    const video =
+      document.getElementById(
+        "cameraVideo"
+      );
+
+
+    const button =
+      document.getElementById(
+        "captureButton"
+      );
+
+
+    button.disabled = true;
+
+    button.textContent =
+      "CAPTURING...";
+
+
+    try {
+
+      let width =
+        video.videoWidth;
+
+
+      let height =
+        video.videoHeight;
+
+
+      if (!width || !height) {
+
+        throw new Error(
+          "Camera image is not ready. Please try again."
+        );
+
+      }
+
+
+      /*
+       * Compress image to reduce
+       * mobile upload size.
+       */
+
+      const maxSize = 1280;
+
+
+      const scale =
+        Math.min(
+          1,
+          maxSize / width,
+          maxSize / height
+        );
+
+
+      width =
+        Math.round(
+          width * scale
+        );
+
+
+      height =
+        Math.round(
+          height * scale
+        );
+
+
+      const canvas =
+        document.createElement(
+          "canvas"
+        );
+
+
+      canvas.width =
+        width;
+
+
+      canvas.height =
+        height;
+
+
+      const context =
+        canvas.getContext(
+          "2d"
+        );
+
+
+      context.drawImage(
+        video,
+        0,
+        0,
+        width,
+        height
+      );
+
+
+      const photo =
+        canvas.toDataURL(
+          "image/jpeg",
+          0.68
+        );
+
+
+      /*
+       * Camera no longer needed.
+       */
+
+      closeCamera();
+
+
+      // ======================================================
+      // GPS
+      // ======================================================
+
+      showActionMessage(
+        "Photo captured. Getting your location...",
+        "loading"
+      );
+
+
+      const position =
+        await getCurrentLocation();
+
+
+      const latitude =
+        position.coords.latitude;
+
+
+      const longitude =
+        position.coords.longitude;
+
+
+      document.getElementById(
+        "locationStatus"
+      ).textContent =
+        "📍 Location captured";
+
+
+      // ======================================================
+      // SEND TO CLOUDFLARE
+      // ======================================================
+
+      showActionMessage(
+        "Saving " +
+        currentAction +
+        "...",
+        "loading"
+      );
+
+
+      const response =
+        await fetch(
+          API_BASE +
+          "/api/attendance",
+          {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+
+              employeeId:
+                currentEmployee.employeeId,
+
+              pin:
+                currentEmployee.pin,
+
+              action:
+                currentAction,
+
+              latitude:
+                latitude,
+
+              longitude:
+                longitude,
+
+              photo:
+                photo
+
+            })
+
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !response.ok ||
+        !data.ok
+      ) {
+
+        throw new Error(
+          data.error ||
+          data.message ||
+          "Attendance could not be saved."
+        );
+
+      }
+
+
+      // ======================================================
+      // SUCCESS
+      // ======================================================
+
+      showActionMessage(
+        currentAction +
+        " recorded successfully with photo and location.",
+        "success"
+      );
+
+
+      document.getElementById(
+        "locationStatus"
+      ).textContent =
+        "📍 Location recorded";
+
+
+      /*
+       * Reload today's status from
+       * Google Sheets through Worker.
+       */
+
+      await loadStatus();
+
+
+    } catch (error) {
+
+      console.error(
+        "ATTENDANCE ERROR:",
+        error
+      );
+
+
+      showActionMessage(
+        error.message ||
+        "Unable to save attendance.",
+        "error"
+      );
+
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "📷 CAPTURE PHOTO";
+
+    }
+
   }
+
+
+  // ==========================================================
+  // GPS
+  // ==========================================================
+
+  function getCurrentLocation() {
+
+    return new Promise(
+      function(resolve, reject) {
+
+        if (
+          !navigator.geolocation
+        ) {
+
+          reject(
+            new Error(
+              "Location/GPS is not supported by this browser."
+            )
+          );
+
+          return;
+
+        }
+
+
+        navigator.geolocation.getCurrentPosition(
+
+          function(position) {
+
+            resolve(position);
+
+          },
+
+          function(error) {
+
+            let message =
+              "Unable to get your location.";
+
+
+            if (
+              error.code === 1
+            ) {
+
+              message =
+                "Location permission was denied. Please allow location access and try again.";
+
+            }
+
+
+            if (
+              error.code === 2
+            ) {
+
+              message =
+                "Your location could not be determined. Please enable GPS/location and try again.";
+
+            }
+
+
+            if (
+              error.code === 3
+            ) {
+
+              message =
+                "Location request timed out. Please try again.";
+
+            }
+
+
+            reject(
+              new Error(message)
+            );
+
+          },
+
+          {
+
+            enableHighAccuracy:
+              true,
+
+            timeout:
+              20000,
+
+            maximumAge:
+              0
+
+          }
+
+        );
+
+      }
+    );
+
+  }
+
+
+  // ==========================================================
+  // DISPLAY ATTENDANCE
+  // ==========================================================
+
+  function displayAttendance(
+    attendance
+  ) {
+
+    if (!attendance) {
+
+      setText(
+        "session1",
+        "--"
+      );
+
+      setText(
+        "session2",
+        "--"
+      );
+
+      setText(
+        "totalHours",
+        "--"
+      );
+
+      return;
+
+    }
+
+
+    const login1 =
+      getField(
+        attendance,
+        [
+          "login1",
+          "Login 1"
+        ]
+      );
+
+
+    const logout1 =
+      getField(
+        attendance,
+        [
+          "logout1",
+          "Logout 1"
+        ]
+      );
+
+
+    const login2 =
+      getField(
+        attendance,
+        [
+          "login2",
+          "Login 2"
+        ]
+      );
+
+
+    const logout2 =
+      getField(
+        attendance,
+        [
+          "logout2",
+          "Logout 2"
+        ]
+      );
+
+
+    const duration1 =
+      getField(
+        attendance,
+        [
+          "session1Duration",
+          "Session 1 Duration"
+        ]
+      );
+
+
+    const duration2 =
+      getField(
+        attendance,
+        [
+          "session2Duration",
+          "Session 2 Duration"
+        ]
+      );
+
+
+    const total =
+      getField(
+        attendance,
+        [
+          "totalWorkingHours",
+          "Total Working Hours"
+        ]
+      );
+
+
+    setText(
+      "session1",
+      formatSession(
+        login1,
+        logout1,
+        duration1
+      )
+    );
+
+
+    setText(
+      "session2",
+      formatSession(
+        login2,
+        logout2,
+        duration2
+      )
+    );
+
+
+    setText(
+      "totalHours",
+      formatDuration(
+        total
+      )
+    );
+
+  }
+
+
+  function formatSession(
+    login,
+    logout,
+    duration
+  ) {
+
+    if (!login && !logout) {
+      return "--";
+    }
+
+
+    if (login && !logout) {
+
+      return (
+        "In: " +
+        formatTime(login)
+      );
+
+    }
+
+
+    if (login && logout) {
+
+      return (
+        formatTime(login) +
+        " → " +
+        formatTime(logout) +
+        (
+          duration
+            ? " (" +
+              formatDuration(
+                duration
+              ) +
+              ")"
+            : ""
+        )
+      );
+
+    }
+
+
+    return "--";
+
+  }
+
+
+  // ==========================================================
+  // HELPERS
+  // ==========================================================
+
+  function getField(
+    object,
+    keys
+  ) {
+
+    for (
+      const key of keys
+    ) {
+
+      if (
+        object[key] !== undefined &&
+        object[key] !== null &&
+        object[key] !== ""
+      ) {
+
+        return object[key];
+
+      }
+
+    }
+
+    return "";
+
+  }
+
+
+  function setText(
+    id,
+    value
+  ) {
+
+    const element =
+      document.getElementById(id);
+
+
+    if (element) {
+
+      element.textContent =
+        value;
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // TIME
+  // ==========================================================
+
+  function formatTime(
+    value
+  ) {
+
+    if (!value) {
+      return "--";
+    }
+
+
+    const stringValue =
+      String(value);
+
+
+    const date =
+      new Date(
+        stringValue.replace(
+          " ",
+          "T"
+        )
+      );
+
+
+    if (
+      !isNaN(
+        date.getTime()
+      )
+    ) {
+
+      return date.toLocaleTimeString(
+        "en-IN",
+        {
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      );
+
+    }
+
+
+    return stringValue;
+
+  }
+
+
+  function formatDuration(
+    value
+  ) {
+
+    if (
+      value === undefined ||
+      value === null ||
+      value === ""
+    ) {
+
+      return "--";
+
+    }
+
+
+    /*
+     * Google Sheets duration may
+     * arrive as a fraction of a day.
+     */
+
+    if (
+      typeof value === "number" &&
+      value >= 0 &&
+      value < 1
+    ) {
+
+      const totalMinutes =
+        Math.round(
+          value *
+          24 *
+          60
+        );
+
+
+      const hours =
+        Math.floor(
+          totalMinutes / 60
+        );
+
+
+      const minutes =
+        totalMinutes % 60;
+
+
+      return (
+        String(hours)
+          .padStart(2, "0") +
+        ":" +
+        String(minutes)
+          .padStart(2, "0")
+      );
+
+    }
+
+
+    return String(value);
+
+  }
+
+
+  // ==========================================================
+  // MESSAGES
+  // ==========================================================
+
+  function showMessage(
+    elementId,
+    message,
+    type
+  ) {
+
+    const element =
+      document.getElementById(
+        elementId
+      );
+
+
+    element.textContent =
+      message;
+
+
+    element.className =
+      "message " +
+      type;
+
+  }
+
+
+  function showActionMessage(
+    message,
+    type
+  ) {
+
+    showMessage(
+      "actionMessage",
+      message,
+      type
+    );
+
+  }
+
+
+  function clearMessage(
+    elementId
+  ) {
+
+    const element =
+      document.getElementById(
+        elementId
+      );
+
+
+    element.textContent =
+      "";
+
+
+    element.className =
+      "message";
+
+  }
+
+
+  // ==========================================================
+  // CLOSE CAMERA
+  // ==========================================================
 
   function closeCamera() {
-    const modal = document.getElementById('cameraModal');
-    modal.classList.remove('active');
-    if(currentStream) {
-      currentStream.getTracks().forEach(track => track.stop());
+
+    if (cameraStream) {
+
+      cameraStream
+        .getTracks()
+        .forEach(
+          function(track) {
+            track.stop();
+          }
+        );
+
+
+      cameraStream = null;
+
     }
+
+
+    const video =
+      document.getElementById(
+        "cameraVideo"
+      );
+
+
+    video.srcObject = null;
+
+
+    document.getElementById(
+      "cameraModal"
+    ).classList.remove(
+      "active"
+    );
+
   }
 
+
+  // ==========================================================
+  // EXIT
+  // ==========================================================
+
   function logoutUser() {
-    document.getElementById('loginScreen').style.display = 'block';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('loginMessage').innerText = "";
-    document.getElementById('loginMessage').className = "message";
-    document.getElementById('actionButton').disabled = false;
-    document.getElementById('session1').innerText = "--";
-    document.getElementById('session2').innerText = "--";
-    document.getElementById('totalHours').innerText = "--";
+
+    closeCamera();
+
+    clearSession();
+
+    showLoginScreen();
+
   }
+
+
+  function clearSession() {
+
+    sessionStorage.removeItem(
+      "aristoEmployee"
+    );
+
+
+    currentEmployee =
+      null;
+
+
+    currentAction =
+      null;
+
+  }
+
+
+  function showLoginScreen() {
+
+    document.getElementById(
+      "dashboard"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "loginScreen"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "employeeId"
+    ).value = "";
+
+
+    document.getElementById(
+      "pin"
+    ).value = "";
+
+
+    clearMessage(
+      "loginMessage"
+    );
+
+
+    clearMessage(
+      "actionMessage"
+    );
+
+  }
+
+
+  // ==========================================================
+  // PAGE LOAD
+  // ==========================================================
+
+  window.addEventListener(
+    "load",
+    function() {
+
+      restoreSession();
+
+    }
+  );
+
 </script>
+
 </body>
 </html>
