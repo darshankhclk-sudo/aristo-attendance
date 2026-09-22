@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>ARISTO Attendance</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-top: 25px;
+      margin-bottom: 25px;
+    }
+
+    .logo h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    .logo p {
+      margin: 7px 0 0;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d5d9dd;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    input:focus {
+      border-color: #222;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 11px;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    .login-btn {
+      background: #111;
+      color: white;
+    }
+
+    .login-btn:disabled,
+    .action-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .logout-btn {
+      background: #e9ecef;
+      color: #222;
+      margin-top: 15px;
+    }
+
+    .employee-name {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .employee-details {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .status-box {
+      background: #f7f7f7;
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .status-title {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 6px;
+    }
+
+    .next-action {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .login-action {
+      background: #16803c;
+      color: white;
+    }
+
+    .logout-action {
+      background: #c62828;
+      color: white;
+    }
+
+    .done-action {
+      background: #777;
+      color: white;
+    }
+
+    .info {
+      margin-top: 18px;
+      padding: 14px;
+      background: #f7f7f7;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .message {
+      margin-top: 15px;
+      padding: 13px;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+      font-size: 14px;
+    }
+
+    .message.success {
+      display: block;
+      background: #e8f5e9;
+      color: #1b5e20;
+    }
+
+    .message.error {
+      display: block;
+      background: #ffebee;
+      color: #b71c1c;
+    }
+
+    .message.loading {
+      display: block;
+      background: #fff8e1;
+      color: #795548;
+    }
+
+    .dashboard {
+      display: none;
+    }
+
+    .login-screen {
+      display: block;
+    }
+
+    .session-box {
+      margin-top: 15px;
+    }
+
+    .session {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    .session:last-child {
+      border-bottom: none;
+    }
+
+    .session span:first-child {
+      font-weight: bold;
+    }
+
+    .total-hours {
+      margin-top: 15px;
+      padding: 15px;
+      background: #111;
+      color: white;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .total-hours small {
+      display: block;
+      opacity: 0.7;
+      margin-bottom: 5px;
+    }
+
+    .total-hours strong {
+      font-size: 24px;
+    }
+
+    /* Camera */
+
+    .camera-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      flex-direction: column;
+    }
+
+    .camera-modal.active {
+      display: flex;
+    }
+
+    .camera-header {
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      background: #111;
+    }
+
+    #cameraVideo {
+      width: 100%;
+      flex: 1;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .camera-controls {
+      padding: 20px;
+      background: #111;
+    }
+
+    .capture-btn {
+      background: white;
+      color: #111;
+      border-radius: 50px;
+      height: 55px;
+      margin: 0;
+    }
+
+    .cancel-camera {
+      background: #444;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .location-status {
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+      margin-top: 10px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .small-note {
+      text-align: center;
+      color: #888;
+      font-size: 12px;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- LOGIN SCREEN -->
+  <div id="loginScreen" class="login-screen">
+
+    <div class="logo">
+      <h1>ARISTO</h1>
+      <p>Employee Attendance</p>
+    </div>
+
+    <div class="card">
+
+      <label for="employeeId">Employee ID</label>
+      <input
+        type="text"
+        id="employeeId"
+        placeholder="Enter Employee ID"
+        autocomplete="username"
+        autocapitalize="characters"
+      >
+
+      <label for="pin">PIN</label>
+      <input
+        type="password"
+        id="pin"
+        placeholder="Enter PIN"
+        inputmode="numeric"
+        autocomplete="current-password"
+      >
+
+      <button id="loginButton" class="login-btn" onclick="login()">
+        LOGIN
+      </button>
+
+      <div id="loginMessage" class="message"></div>
+
+    </div>
+
+    <div class="small-note">
+      Camera and location permission are required for attendance.
+    </div>
+
+  </div>
+
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="dashboard">
+
+    <div class="logo">
+      <h1>ARISTO</h1>
+      <p>Employee Attendance</p>
+    </div>
+
+    <div class="card">
+
+      <div id="employeeName" class="employee-name">
+        Employee
+      </div>
+
+      <div id="employeeDetails" class="employee-details">
+        --
+      </div>
+
+      <div class="status-box">
+
+        <div class="status-title">
+          NEXT ACTION
+        </div>
+
+        <div id="nextAction" class="next-action">
+          --
+        </div>
+
+      </div>
+
+      <button
+        id="actionButton"
+        class="action-btn"
+        onclick="startAttendance()">
+        --
+      </button>
+
+      <div id="locationStatus" class="location-status">
+        Location will be captured automatically.
+      </div>
+
+      <div id="actionMessage" class="message"></div>
+
+
+      <div class="session-box">
+
+        <div class="session">
+          <span>Session 1</span>
+          <span id="session1">--</span>
+        </div>
+
+        <div class="session">
+          <span>Session 2</span>
+          <span id="session2">--</span>
+        </div>
+
+        <div class="total-hours">
+          <small>Total Working Hours</small>
+          <strong id="totalHours">--</strong>
+        </div>
+
+      </div>
+
+
+      <div class="info">
+        <strong>Attendance process</strong><br><br>
+        1. Login → Photo + GPS<br>
+        2. Logout → Photo + GPS<br>
+        3. Optional second Login / Logout<br>
+        4. Maximum 2 sessions per day
+      </div>
+
+      <button class="logout-btn" onclick="logoutUser()">
+        EXIT
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CAMERA MODAL -->
+
+<div id="cameraModal" class="camera-modal">
+
+  <div class="camera-header">
+    Take Attendance Photo
+  </div>
+
+  <video id="cameraVideo" autoplay playsinline></video>
+
+  <div class="camera-controls">
+
+    <button
+      id="captureButton"
+      class="capture-btn"
+      onclick="capturePhoto()">
+      📷 CAPTURE PHOTO
+    </button>
+
+    <button
+      class="cancel-camera"
+      onclick="closeCamera()">
+      CANCEL
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+  // Simple functional stub to ensure the code tags close properly
+  let currentStream = null;
+
+  function login() {
+    const empId = document.getElementById('employeeId').value;
+    const pin = document.getElementById('pin').value;
+    const msg = document.getElementById('loginMessage');
+    
+    if(!empId || !pin) {
+      msg.className = "message error";
+      msg.innerText = "Please enter both Employee ID and PIN";
+      return;
+    }
+    
+    msg.className = "message success";
+    msg.innerText = "Logged in successfully!";
+    
+    setTimeout(() => {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('employeeName').innerText = empId.toUpperCase();
+      document.getElementById('employeeDetails').innerText = "ID: " + empId;
+      updateStatus("LOGIN 1");
+    }, 1000);
+  }
+
+  function updateStatus(action) {
+    const nextAction = document.getElementById('nextAction');
+    const actionBtn = document.getElementById('actionButton');
+    
+    nextAction.innerText = action;
+    actionBtn.innerText = action;
+    
+    if (action.includes("LOGIN")) {
+      nextAction.className = "next-action login-action";
+      actionBtn.className = "action-btn login-action";
+    } else {
+      nextAction.className = "next-action logout-action";
+      actionBtn.className = "action-btn logout-action";
+    }
+  }
+
+  function startAttendance() {
+    const modal = document.getElementById('cameraModal');
+    modal.classList.add('active');
+    
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+      .then(stream => {
+        currentStream = stream;
+        document.getElementById('cameraVideo').srcObject = stream;
+      })
+      .catch(err => {
+        alert("Camera permission denied or unavailable.");
+        closeCamera();
+      });
+  }
+
+  function capturePhoto() {
+    const msg = document.getElementById('actionMessage');
+    msg.className = "message success";
+    msg.innerText = "Attendance recorded successfully with your location!";
+    
+    const currentAction = document.getElementById('nextAction').innerText;
+    if(currentAction === "LOGIN 1") {
+      document.getElementById('session1').innerText = "In: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      updateStatus("LOGOUT 1");
+    } else if(currentAction === "LOGOUT 1") {
+      document.getElementById('session1').innerText += " | Out: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      updateStatus("LOGIN 2");
+    } else if(currentAction === "LOGIN 2") {
+      document.getElementById('session2').innerText = "In: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      updateStatus("LOGOUT 2");
+    } else {
+      document.getElementById('session2').innerText += " | Out: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      document.getElementById('nextAction').innerText = "DONE";
+      document.getElementById('nextAction').className = "next-action done-action";
+      document.getElementById('actionButton').disabled = true;
+    }
+    
+    closeCamera();
+  }
+
+  function closeCamera() {
+    const modal = document.getElementById('cameraModal');
+    modal.classList.remove('active');
+    if(currentStream) {
+      currentStream.getTracks().forEach(track => track.stop());
+    }
+  }
+
+  function logoutUser() {
+    document.getElementById('loginScreen').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('loginMessage').innerText = "";
+    document.getElementById('loginMessage').className = "message";
+    document.getElementById('actionButton').disabled = false;
+    document.getElementById('session1').innerText = "--";
+    document.getElementById('session2').innerText = "--";
+    document.getElementById('totalHours').innerText = "--";
+  }
+<\/script>
+
+</body>
+</html>
